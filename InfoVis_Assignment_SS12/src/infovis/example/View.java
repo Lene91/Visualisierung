@@ -28,7 +28,7 @@ public class View extends JPanel {
         
         g2D.setColor(color1);
         g2D.fill(rect);
-        Color color2 = Color.RED;
+        Color color2 = Color.GREEN;
         g2D.setColor(color2);
         g2D.draw(rect);
         
