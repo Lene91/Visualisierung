@@ -22,7 +22,7 @@ public class View extends JPanel {
         
         
         Rectangle2D rect = new Rectangle2D.Double(50,50,200,200);
-        Rectangle2D rect2 = new Rectangle2D.Double(50,50,100,100);
+        Rectangle2D rect2 = new Rectangle2D.Double(70,50,100,100);
         
         Color color1 = Color.YELLOW;
         
