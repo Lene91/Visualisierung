@@ -42,11 +42,20 @@ public class View extends JPanel{
 		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		g2D.clearRect(0, 0, getWidth(), getHeight());
 		
-		//overviewRect.setRect(0,0,50,50);
+
 		paintDiagram(g2D);
-		
-		
-		
+		overviewRect = new Rectangle2D.Double(-5,-5,890, 800);
+		marker = new Rectangle2D.Double(0,0,getWidth(),getHeight());
+		g2D.translate(100, 100);
+		g2D.scale(0.25,0.25);
+		g2D.setColor(Color.WHITE);
+		g2D.fill(overviewRect);
+		g2D.setColor(Color.BLACK);
+		g2D.draw(overviewRect);
+		g2D.setColor(Color.YELLOW);
+		g2D.fill(marker);
+		g2D.draw(marker);
+		paintDiagram(g2D);
 	}
 	private void paintDiagram(Graphics2D g2D){
 		for (Element element: model.getElements()){
