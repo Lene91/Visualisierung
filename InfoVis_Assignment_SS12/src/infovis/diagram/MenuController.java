@@ -1,5 +1,6 @@
 package infovis.diagram;
 
+import infovis.debug.Debug;
 import infovis.diagram.elements.Label;
 import infovis.diagram.elements.Vertex;
 

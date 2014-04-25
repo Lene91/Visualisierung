@@ -1,7 +1,10 @@
 package infovis.gui;
 
 import infovis.diagram.Diagram;
+
 import infovis.diagram.MenuController;
+
+import infovis.debug.Debug;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -25,7 +28,6 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
-
 
 public class GUI {
 
