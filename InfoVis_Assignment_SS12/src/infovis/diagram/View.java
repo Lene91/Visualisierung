@@ -55,9 +55,11 @@ public class View extends JPanel{
 		g2DMini.fill(overviewRect);
 		g2DMini.setColor(Color.BLACK);
 		g2DMini.draw(overviewRect);
+		g2DMini.scale(1/scale,1/scale);
 		g2DMini.setColor(Color.YELLOW);
 		g2DMini.fill(marker);
 		g2DMini.draw(marker);
+		g2DMini.scale(scale,scale);
 		
 		paintDiagram(g2DMini);
 		
