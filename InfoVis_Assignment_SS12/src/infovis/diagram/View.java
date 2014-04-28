@@ -43,12 +43,37 @@ public class View extends JPanel{
 		g2D.clearRect(0, 0, getWidth(), getHeight());
 		
 		g2D.scale(scale,scale);
-
+		g2D.translate(translateX, translateY); 
 		paintDiagram(g2D);
-		overviewRect = new Rectangle2D.Double(-5,-5,890, 800);
-		marker = new Rectangle2D.Double(0,0,getWidth(),getHeight());
+		g2D.translate(-translateX, -translateY);
 		
-		Graphics2D g2DMini = (Graphics2D) g;
+		g2D.scale(0.25, 0.25);
+		g2D.scale(1/scale, 1/scale);
+		
+		overviewRect = new Rectangle2D.Double(0,0, 900,900);
+		marker = getVisibleRect(); //new Rectangle2D.Double(translateX, translateY, getWidth(), getHeight());
+		
+		g2D.setColor(Color.WHITE);
+		g2D.fill(overviewRect);
+		g2D.setColor(Color.BLACK);
+		g2D.draw(overviewRect);
+		
+		g2D.translate(-translateX, -translateY);
+		g2D.setColor(Color.YELLOW);
+		g2D.scale(1/scale, 1/scale);
+		g2D.fill(marker);
+		g2D.draw(marker);
+		
+		g2D.scale(scale, scale);
+		g2D.translate(translateX, translateY);
+		paintDiagram(g2D);
+		g2D.translate(translateX, translateY);
+		
+		/*Graphics2D g2DMini = (Graphics2D) g;
+		//not optimal yet
+		overviewRect = new Rectangle2D.Double(tmp.getX()-5,tmp.getY()-5,890, 800);
+		marker = new Rectangle2D.Double(tmp.getX(),tmp.getY(), getWidth(), getHeight());
+		
 		g2DMini.scale(0.25,0.25);
 		g2DMini.scale(1/scale,1/scale);
 		g2DMini.setColor(Color.WHITE);
@@ -61,7 +86,7 @@ public class View extends JPanel{
 		g2DMini.draw(marker);
 		g2DMini.scale(scale,scale);
 		
-		paintDiagram(g2DMini);
+		paintDiagram(g2DMini);*/
 		
 	}
 	private void paintDiagram(Graphics2D g2D){
@@ -97,7 +122,8 @@ public class View extends JPanel{
 		setTranslateX(x);
 		setTranslateY(y);
 	}	
-	public void updateMarker(int x, int y){
+	// vorher input:int,int
+	public void updateMarker(double x, double y){
 		marker.setRect(x, y, 16, 10);
 	}
 	public Rectangle2D getMarker(){

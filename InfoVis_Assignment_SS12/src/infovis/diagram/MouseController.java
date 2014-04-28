@@ -91,6 +91,7 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		int x = e.getX();
 		int y = e.getY();
 		double scale = view.getScale();
+		
 	   
 	   if (edgeDrawMode){
 			drawingEdge = new DrawingEdge((Vertex)getElementContainingPosition(x/scale,y/scale));
@@ -167,6 +168,12 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		int x = e.getX();
 		int y = e.getY();
 		double scale = view.getScale();
+
+		if (view.markerContains(x,y) == true){
+			view.updateTranslation((e.getX()-mouseOffsetX), (e.getY()-mouseOffsetY));
+			view.repaint();
+		}
+			
 		/*
 		 * Aufgabe 1.2
 		 */
