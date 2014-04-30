@@ -30,6 +30,7 @@ public class MouseController implements MouseListener, MouseMotionListener {
 	}
 
 	public void mouseReleased(MouseEvent arg0) {
+		
 	}
 
 	public void mouseDragged(MouseEvent arg0) {
