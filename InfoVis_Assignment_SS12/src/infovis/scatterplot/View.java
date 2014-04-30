@@ -38,20 +38,21 @@ public class View extends JPanel {
 			h = 75;
 			for (Data d : model.getList()) {
 				for (int i = 0; i < 7; ++i) {
-					Range range = model.getRanges().get(i);
-					double newValue = getMappedValue(d.getValues()[i], range.getMax(), range.getMin(), x, x+w);
-					Rectangle2D rect = new Rectangle2D.Double(newValue-5,y+25,10,10);
-					g2D.draw(rect);
-					x += w;
-					if(i%7 == 0) {
-						y += h;
-						x = 200;
+					Range rangeI = model.getRanges().get(i);
+					double newValueI = getMappedValue(d.getValues()[i], rangeI.getMin(), rangeI.getMax(), y, y+h);
+					for (int j = 0; j < 7; ++j) {
+						Range rangeJ = model.getRanges().get(j);
+						double newValueJ = getMappedValue(d.getValues()[j], rangeJ.getMin(), rangeJ.getMax(), x, x+w);
+						Rectangle2D rect = new Rectangle2D.Double(newValueJ-2,newValueI-2,4,4);
+						g2D.draw(rect);
+						x += w;
 					}
-					System.out.println("value "+ newValue);
+					y += h;
+					x = 200;
 				}
 			}
 			
-			g2D.setColor(Color.YELLOW);
+			g2D.setColor(Color.RED);
 			g2D.draw(markerRectangle);
 			g2D.setColor(Color.BLACK);
 			int i = 0;
@@ -60,20 +61,8 @@ public class View extends JPanel {
 	        for (String l : model.getLabels()) {
 	        	g.drawString(l, 200+i*75, 50+j);
 	        	g.drawString(l, 20, 150+i*75);
-				Debug.print(l);
-				Debug.print(",  ");
-				Debug.println("");
 				i++;
 				j = -j;
-			}
-			for (Range range : model.getRanges()) {
-				Debug.print(range.toString());
-				Debug.print(",  ");
-				Debug.println("");
-			}
-			for (Data d : model.getList()) {
-				Debug.print(d.toString());
-				Debug.println("");
 			}
 	        
 			
@@ -87,10 +76,6 @@ public class View extends JPanel {
 			y = 100;
 			w = 75;
 			h = 75;
-			int x = 200;
-			int y = 100;
-			int w = 75;
-			int h = 75;
 			for (int i = 1; i < 50; ++i) {
 				Rectangle2D rect = new Rectangle2D.Double(x,y,w,h);
 				g2D.draw(rect);
@@ -103,7 +88,7 @@ public class View extends JPanel {
 		}
 		
 
-		private double getMappedValue(double oldValue, double oldMax, double oldMin, double newMax, double newMin) {
+		private double getMappedValue(double oldValue, double oldMin, double oldMax, double newMin, double newMax) {
 			double oldRange = oldMax - oldMin;
 			double newRange = newMax - newMin;
 			double newValue = (((oldValue - oldMin) * newRange) / oldRange) + newMin;
