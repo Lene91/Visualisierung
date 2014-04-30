@@ -18,7 +18,7 @@ public class View extends JPanel {
 	     int y;
 	     double w;
 	     double h;
-	     private ArrayList<Integer> markedData = new ArrayList<Integer>();
+	     private ArrayList<Data> markedData = new ArrayList<Data>();
 	     
 
 		 public Rectangle2D getMarkerRectangle() {
@@ -39,12 +39,21 @@ public class View extends JPanel {
 			w = 75;
 			h = 75;
 			for (Data d : model.getList()) {
+				if (markedData.contains(d)){
+					g2D.setColor(Color.ORANGE);
+				}
+				else{
+					g2D.setColor(Color.BLACK);
+				}
 				for (int i = 0; i < 7; ++i) {
 					Range rangeI = model.getRanges().get(i);
 					double newValueI = getMappedValue(d.getValues()[i], rangeI.getMin(), rangeI.getMax(), y, y+h);
 					for (int j = 0; j < 7; ++j) {
 						Range rangeJ = model.getRanges().get(j);
 						double newValueJ = getMappedValue(d.getValues()[j], rangeJ.getMin(), rangeJ.getMax(), x, x+w);
+						if (withinMarker(newValueJ,newValueI)){
+							markedData.add(d);
+						}
 						Rectangle2D rect = new Rectangle2D.Double(newValueJ-2,newValueI-2,4,4);
 						g2D.draw(rect);
 						x += w;
@@ -53,6 +62,7 @@ public class View extends JPanel {
 					x = 200;
 				}
 				y = 100;
+
 			}
 			
 			g2D.setColor(Color.RED);
@@ -99,7 +109,7 @@ public class View extends JPanel {
 			return newValue;
 		}
 		
-		public ArrayList<Integer> getMarkedData(){
+		public ArrayList<Data> getMarkedData(){
 			return this.markedData;
 		}
 		
