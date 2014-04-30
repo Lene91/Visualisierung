@@ -18,7 +18,6 @@ public class View extends JPanel {
 		 
 		@Override
 		public void paint(Graphics g) {
-
 	        for (String l : model.getLabels()) {
 				Debug.print(l);
 				Debug.print(",  ");
