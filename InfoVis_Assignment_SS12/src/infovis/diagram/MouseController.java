@@ -21,6 +21,8 @@ public class MouseController implements MouseListener,MouseMotionListener {
 	 private Model model;
 	 private View view;
 	 private Element selectedElement = new None();
+	 private double markerOffsetX;
+	 private double markerOffsetY;
 	 private double mouseOffsetX;
 	 private double mouseOffsetY;
 	 private boolean edgeDrawMode = false;
@@ -107,6 +109,8 @@ public class MouseController implements MouseListener,MouseMotionListener {
 			/*
 			 * calculate offset
 			 */
+			markerOffsetX = x-view.getMarker().getX() * scale;
+			markerOffsetY = y-view.getMarker().getY() * scale;
 			mouseOffsetX = x - selectedElement.getX() * scale ;
 			mouseOffsetY = y - selectedElement.getY() * scale ;	
 		}
@@ -168,11 +172,18 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		int x = e.getX();
 		int y = e.getY();
 		double scale = view.getScale();
-
+		
 		if (view.markerContains(x,y) == true){
-			view.updateTranslation((e.getX()-mouseOffsetX), (e.getY()-mouseOffsetY));
+			view.setMarkerTranslate((e.getX()- markerOffsetX), (e.getY()- markerOffsetY));
+			view.updateTranslation((e.getX()- markerOffsetX), (e.getY()- markerOffsetY));
 			view.repaint();
 		}
+		/*if (view.overviewContains(x, y) == true && view.markerContains(x, y) == false){
+			double newX = (e.getX()- markerOffsetX);
+			double newY = (e.getY()- markerOffsetY);
+			view.getOverviewRect().setRect(newX, newY, view.getOverviewRect().getWidth(), view.getOverviewRect().getHeight());
+			view.repaint();
+		}*/
 			
 		/*
 		 * Aufgabe 1.2
