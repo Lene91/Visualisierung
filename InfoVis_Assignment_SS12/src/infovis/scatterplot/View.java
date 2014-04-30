@@ -52,6 +52,7 @@ public class View extends JPanel {
 					y += h;
 					x = 200;
 				}
+				y = 100;
 			}
 			
 			g2D.setColor(Color.RED);
@@ -102,7 +103,7 @@ public class View extends JPanel {
 			return this.markedData;
 		}
 		
-		private boolean withinMarker(int x, int y){
+		private boolean withinMarker(double x, double y){
 			return markerRectangle.contains(x,y);
 		}
 
