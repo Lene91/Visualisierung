@@ -2,6 +2,7 @@ package infovis.scatterplot;
 
 import infovis.debug.Debug;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -49,11 +50,21 @@ public class View extends JPanel {
 					System.out.println("value "+ newValue);
 				}
 			}
+			
+			g2D.setColor(Color.YELLOW);
+			g2D.draw(markerRectangle);
+			g2D.setColor(Color.BLACK);
+			int i = 0;
+			int j = 10;
 
 	        for (String l : model.getLabels()) {
+	        	g.drawString(l, 200+i*75, 50+j);
+	        	g.drawString(l, 20, 150+i*75);
 				Debug.print(l);
 				Debug.print(",  ");
 				Debug.println("");
+				i++;
+				j = -j;
 			}
 			for (Range range : model.getRanges()) {
 				Debug.print(range.toString());
@@ -76,6 +87,10 @@ public class View extends JPanel {
 			y = 100;
 			w = 75;
 			h = 75;
+			int x = 200;
+			int y = 100;
+			int w = 75;
+			int h = 75;
 			for (int i = 1; i < 50; ++i) {
 				Rectangle2D rect = new Rectangle2D.Double(x,y,w,h);
 				g2D.draw(rect);
@@ -87,10 +102,13 @@ public class View extends JPanel {
 			}
 		}
 		
+
 		private double getMappedValue(double oldValue, double oldMax, double oldMin, double newMax, double newMin) {
 			double oldRange = oldMax - oldMin;
 			double newRange = newMax - newMin;
 			double newValue = (((oldValue - oldMin) * newRange) / oldRange) + newMin;
 			return newValue;
 		}
+
+
 }
