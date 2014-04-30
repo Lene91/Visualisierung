@@ -22,6 +22,7 @@ public class MouseController implements MouseListener, MouseMotionListener {
 
 	public void mousePressed(MouseEvent arg0) {
 		//Iterator<Data> iter = model.iterator();
+		view.getMarkedData().clear();
 		startX = arg0.getX();
 		startY = arg0.getY();
 		//view.getMarkerRectangle().setRect(x,y,w,h);

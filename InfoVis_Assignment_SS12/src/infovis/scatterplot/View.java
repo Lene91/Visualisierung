@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -17,6 +18,7 @@ public class View extends JPanel {
 	     int y;
 	     double w;
 	     double h;
+	     private ArrayList<Integer> markedData = new ArrayList<Integer>();
 	     
 
 		 public Rectangle2D getMarkerRectangle() {
@@ -54,28 +56,16 @@ public class View extends JPanel {
 			g2D.setColor(Color.YELLOW);
 			g2D.draw(markerRectangle);
 			g2D.setColor(Color.BLACK);
+			
 			int i = 0;
 			int j = 10;
 
 	        for (String l : model.getLabels()) {
 	        	g.drawString(l, 200+i*75, 50+j);
 	        	g.drawString(l, 20, 150+i*75);
-				Debug.print(l);
-				Debug.print(",  ");
-				Debug.println("");
 				i++;
 				j = -j;
 			}
-			for (Range range : model.getRanges()) {
-				Debug.print(range.toString());
-				Debug.print(",  ");
-				Debug.println("");
-			}
-			for (Data d : model.getList()) {
-				Debug.print(d.toString());
-				Debug.println("");
-			}
-	        
 			
 		}
 		public void setModel(Model model) {
@@ -102,13 +92,20 @@ public class View extends JPanel {
 			}
 		}
 		
-
+		
 		private double getMappedValue(double oldValue, double oldMax, double oldMin, double newMax, double newMin) {
 			double oldRange = oldMax - oldMin;
 			double newRange = newMax - newMin;
 			double newValue = (((oldValue - oldMin) * newRange) / oldRange) + newMin;
 			return newValue;
 		}
-
+		
+		public ArrayList<Integer> getMarkedData(){
+			return this.markedData;
+		}
+		
+		private boolean withinMarker(int x, int y){
+			return markerRectangle.contains(x,y);
+		}
 
 }
