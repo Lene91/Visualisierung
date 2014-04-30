@@ -2,6 +2,7 @@ package infovis.scatterplot;
 
 import infovis.debug.Debug;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -25,7 +26,9 @@ public class View extends JPanel {
 			g2D.clearRect(0, 0, getWidth(), getHeight());
 			
 			drawGrid(g2D);
-			
+			g2D.setColor(Color.YELLOW);
+			g2D.draw(markerRectangle);
+			g2D.setColor(Color.BLACK);
 			int i = 0;
 			int j = 10;
 	        for (String l : model.getLabels()) {
@@ -68,4 +71,6 @@ public class View extends JPanel {
 				}
 			}
 		}
+		
+		
 }
