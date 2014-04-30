@@ -26,11 +26,16 @@ public class View extends JPanel {
 			
 			drawGrid(g2D);
 			
-
+			int i = 0;
+			int j = 10;
 	        for (String l : model.getLabels()) {
+	        	g.drawString(l, 200+i*75, 50+j);
+	        	g.drawString(l, 20, 150+i*75);
 				Debug.print(l);
 				Debug.print(",  ");
 				Debug.println("");
+				i++;
+				j = -j;
 			}
 			for (Range range : model.getRanges()) {
 				Debug.print(range.toString());
@@ -49,7 +54,7 @@ public class View extends JPanel {
 		}
 		
 		private void drawGrid(Graphics2D g2D) {
-			int x = 100;
+			int x = 200;
 			int y = 100;
 			int w = 75;
 			int h = 75;
@@ -59,7 +64,7 @@ public class View extends JPanel {
 				x += w;
 				if(i%7 == 0) {
 					y += h;
-					x = 100;
+					x = 200;
 				}
 			}
 		}
