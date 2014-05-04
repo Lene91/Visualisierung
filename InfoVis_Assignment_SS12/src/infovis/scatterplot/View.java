@@ -7,7 +7,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.awt.geom.Point2D;
+import java.util.Iterator;
 
 import javax.swing.JPanel;
 
@@ -18,7 +21,7 @@ public class View extends JPanel {
 	     int y;
 	     double w;
 	     double h;
-	     private ArrayList<Data> markedData = new ArrayList<Data>();
+	     private Map<Data,Point2D> markedData = new HashMap<Data,Point2D>();
 	     
 
 		 public Rectangle2D getMarkerRectangle() {
@@ -39,7 +42,9 @@ public class View extends JPanel {
 			w = 75;
 			h = 75;
 			for (Data d : model.getList()) {
-				if (markedData.contains(d)){
+
+				checkMarkedPoints();
+				if (markedData.containsKey(d)){
 					g2D.setColor(Color.ORANGE);
 				}
 				else{
@@ -52,7 +57,8 @@ public class View extends JPanel {
 						Range rangeJ = model.getRanges().get(j);
 						double newValueJ = getMappedValue(d.getValues()[j], rangeJ.getMin(), rangeJ.getMax(), x, x+w);
 						if (withinMarker(newValueJ,newValueI)){
-							markedData.add(d);
+							Point2D p = new Point2D.Double(newValueJ,newValueI);
+							markedData.put(d,p);
 						}
 						Rectangle2D rect = new Rectangle2D.Double(newValueJ-2,newValueI-2,4,4);
 						g2D.draw(rect);
@@ -109,8 +115,17 @@ public class View extends JPanel {
 			return newValue;
 		}
 		
-		public ArrayList<Data> getMarkedData(){
+		public Map<Data,Point2D> getMarkedData(){
 			return this.markedData;
+		}
+		
+		public void checkMarkedPoints(){
+			for (Data d: markedData.keySet()){
+				Point2D val = markedData.get(d);
+				if (withinMarker(val.getX(),val.getY()) != true)
+					markedData.remove(d);
+					
+			}
 		}
 		
 		private boolean withinMarker(double x, double y){
