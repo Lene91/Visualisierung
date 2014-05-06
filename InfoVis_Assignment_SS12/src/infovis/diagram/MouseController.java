@@ -24,6 +24,7 @@ public class MouseController implements MouseListener,MouseMotionListener {
 	 private double mouseOffsetX;
 	 private double mouseOffsetY;
 	 private boolean markerDrag = false;
+	 private boolean overviewDrag = false;
 	 private boolean edgeDrawMode = false;
 	 private DrawingEdge drawingEdge = null;
 	 private boolean fisheyeMode;
@@ -95,8 +96,13 @@ public class MouseController implements MouseListener,MouseMotionListener {
 	 if (view.markerContains(x, y)){
 		markerDrag = true;
 		mouseOffsetX = x - view.getMarker().getX();
-		mouseOffsetY = y - view.getMarker().getY() ;	
+		mouseOffsetY = y - view.getMarker().getY();	
 		
+	 }
+	 else if (view.overviewContains(x, y)){
+		 overviewDrag = true;
+		 mouseOffsetX = x - view.getOverviewRect().getX();
+		 mouseOffsetY = y - view.getOverviewRect().getY();
 	 }
 	   
 	   if (edgeDrawMode){
@@ -125,6 +131,7 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		int y = arg0.getY();
 		
 		markerDrag = false;
+		overviewDrag = false;
 		
 		if (drawingEdge != null){
 			Element to = getElementContainingPosition(x, y);
@@ -197,6 +204,9 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		}
 		else if (markerDrag){
 			view.updateMarker(x-mouseOffsetX, y-mouseOffsetY);
+		}
+		else if (overviewDrag){
+			view.updateOverview(x-mouseOffsetX, y-mouseOffsetY);
 		}
 		
 		view.repaint();

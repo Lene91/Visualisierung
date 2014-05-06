@@ -111,6 +111,9 @@ public class View extends JPanel{
 		marker.setRect(x, y, getWidth() * overviewScale / scale, getHeight() * overviewScale / scale);
 		
 	}
+	public void updateOverview(double x, double y){
+		overviewRect.setRect(x,y,200,180);
+	}
 	
 	public Rectangle2D getMarker(){
 		return marker;
@@ -125,5 +128,6 @@ public class View extends JPanel{
 	public boolean overviewContains(int x, int y){
 		return overviewRect.contains(x,y);
 	}
+	
 }
  
