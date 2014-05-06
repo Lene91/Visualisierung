@@ -20,11 +20,10 @@ import java.util.List;
 public class MouseController implements MouseListener,MouseMotionListener {
 	 private Model model;
 	 private View view;
-	 private Element selectedElement = new None();
-	 private double markerOffsetX;
-	 private double markerOffsetY;
+	 private Element selectedElement = null;
 	 private double mouseOffsetX;
 	 private double mouseOffsetY;
+	 private boolean markerDrag = false;
 	 private boolean edgeDrawMode = false;
 	 private DrawingEdge drawingEdge = null;
 	 private boolean fisheyeMode;
@@ -93,7 +92,12 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		int x = e.getX();
 		int y = e.getY();
 		double scale = view.getScale();
+	 if (view.markerContains(x, y)){
+		markerDrag = true;
+		mouseOffsetX = x - view.getMarker().getX();
+		mouseOffsetY = y - view.getMarker().getY() ;	
 		
+	 }
 	   
 	   if (edgeDrawMode){
 			drawingEdge = new DrawingEdge((Vertex)getElementContainingPosition(x/scale,y/scale));
@@ -105,20 +109,22 @@ public class MouseController implements MouseListener,MouseMotionListener {
 			view.repaint();
 		} else {
 			
-			selectedElement = getElementContainingPosition(x/scale,y/scale);
+			selectedElement = getElementContainingPosition(x/scale + view.getTranslateX(),y/scale+ view.getTranslateY());
 			/*
 			 * calculate offset
 			 */
-			markerOffsetX = x-view.getMarker().getX() * scale;
-			markerOffsetY = y-view.getMarker().getY() * scale;
-			mouseOffsetX = x - selectedElement.getX() * scale ;
-			mouseOffsetY = y - selectedElement.getY() * scale ;	
+			if (selectedElement != null){
+				mouseOffsetX = x - selectedElement.getX() * scale ;
+				mouseOffsetY = y - selectedElement.getY() * scale ;
+			}
 		}
 		
 	}
 	public void mouseReleased(MouseEvent arg0){
 		int x = arg0.getX();
 		int y = arg0.getY();
+		
+		markerDrag = false;
 		
 		if (drawingEdge != null){
 			Element to = getElementContainingPosition(x, y);
@@ -173,17 +179,7 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		int y = e.getY();
 		double scale = view.getScale();
 		
-		if (view.markerContains(x,y) == true){
-			view.setMarkerTranslate((e.getX()- markerOffsetX), (e.getY()- markerOffsetY));
-			view.updateTranslation((e.getX()- markerOffsetX), (e.getY()- markerOffsetY));
-			view.repaint();
-		}
-		/*if (view.overviewContains(x, y) == true && view.markerContains(x, y) == false){
-			double newX = (e.getX()- markerOffsetX);
-			double newY = (e.getY()- markerOffsetY);
-			view.getOverviewRect().setRect(newX, newY, view.getOverviewRect().getWidth(), view.getOverviewRect().getHeight());
-			view.repaint();
-		}*/
+		
 			
 		/*
 		 * Aufgabe 1.2
@@ -199,6 +195,10 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		}else if(selectedElement != null){
 			selectedElement.updatePosition((e.getX()-mouseOffsetX)/scale, (e.getY()-mouseOffsetY) /scale);
 		}
+		else if (markerDrag){
+			view.updateMarker(x-mouseOffsetX, y-mouseOffsetY);
+		}
+		
 		view.repaint();
 	}
 	public void mouseMoved(MouseEvent e) {
@@ -229,7 +229,7 @@ public class MouseController implements MouseListener,MouseMotionListener {
 	 * private Methods
 	 */
 	private Element getElementContainingPosition(double x,double y){
-		Element currentElement = new None();
+		Element currentElement = null;
 		Iterator<Element> iter = getModel().iterator();
 		while (iter.hasNext()) {
 		  Element element =  iter.next();
