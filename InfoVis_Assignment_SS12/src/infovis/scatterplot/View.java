@@ -43,7 +43,6 @@ public class View extends JPanel {
 			h = 75;
 			for (Data d : model.getList()) {
 
-				checkMarkedPoints();
 				if (markedData.containsKey(d)){
 					g2D.setColor(Color.ORANGE);
 				}
@@ -59,6 +58,14 @@ public class View extends JPanel {
 						if (withinMarker(newValueJ,newValueI)){
 							Point2D p = new Point2D.Double(newValueJ,newValueI);
 							markedData.put(d,p);
+						}
+						else {
+							if (markedData.containsKey(d)){
+								Point2D p = markedData.get(d);
+								if (!withinMarker(p.getX(), p.getY())){
+									markedData.remove(d);
+								}
+							}
 						}
 						Rectangle2D rect = new Rectangle2D.Double(newValueJ-2,newValueI-2,4,4);
 						g2D.draw(rect);
@@ -118,15 +125,7 @@ public class View extends JPanel {
 		public Map<Data,Point2D> getMarkedData(){
 			return this.markedData;
 		}
-		
-		public void checkMarkedPoints(){
-			for (Data d: markedData.keySet()){
-				Point2D val = markedData.get(d);
-				if (withinMarker(val.getX(),val.getY()) != true)
-					markedData.remove(d);
-					
-			}
-		}
+
 		
 		private boolean withinMarker(double x, double y){
 			return markerRectangle.contains(x,y);
