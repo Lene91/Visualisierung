@@ -23,6 +23,7 @@ public class View extends JPanel {
     private Rectangle2D markerRectangle = new Rectangle2D.Double(0,0,0,0);
 	private int start = 110;
 	private int end = 510;
+	private int xStep = 100;
     private Map<Data,Point2D> markedData = new HashMap<Data,Point2D>();
 	
 	public Rectangle2D getMarkerRectangle() {
@@ -44,7 +45,7 @@ public class View extends JPanel {
 	}
 
 	private void drawSystem(Graphics2D g2D) {
-		int x = 100;
+		int x = xStep;
 		int j = 10;
 		for(int i = 0; i < model.getLabels().size(); ++i)
 		{
@@ -55,7 +56,7 @@ public class View extends JPanel {
 			Line2D line = new Line2D.Double(x,start,x,end);
 			g2D.draw(line);
 			g2D.drawString(String.valueOf(r.getMin()), x, end+15);
-			x += 100;
+			x += xStep;
 			j = -j;
 		}
 	}
@@ -71,7 +72,7 @@ public class View extends JPanel {
 				g2D.setColor(Color.BLACK);
 			}
 			
-			int xPos = 100;
+			int xPos = xStep;
 			Path2D line = new Path2D.Double();
 			for (int i = 0; i < model.getLabels().size(); ++i) {
 				Range range = model.getRanges().get(i);
@@ -92,7 +93,7 @@ public class View extends JPanel {
 						}
 					}
 				}
-				xPos += 100;
+				xPos += xStep;
 			}
 			g2D.draw(line);
 		
@@ -128,6 +129,13 @@ public class View extends JPanel {
 
 	private boolean withinMarker(double x, double y){
 		return markerRectangle.contains(x,y);
+	}
+	
+	public boolean isNearAxis(double x, double y) {
+		double tmp = x % xStep; 
+		if (xStep - tmp < 10 && x > 90 && y > start && y < end)
+			return true;
+		else return false;		
 	}
 	
 }

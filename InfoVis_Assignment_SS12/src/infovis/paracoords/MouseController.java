@@ -29,6 +29,8 @@ public class MouseController implements MouseListener, MouseMotionListener {
 	public void mousePressed(MouseEvent e) {
 		startX = e.getX();
 		startY = e.getY();
+		if(view.isNearAxis(startX,startY))
+			System.out.println(":)");
 
 	}
 
