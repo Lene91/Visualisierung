@@ -101,7 +101,7 @@ public class View extends JPanel {
 		
 		private void drawGrid(Graphics2D g2D) {
 
-			for (int i = 1; i < Math.pow(model.getLabels().size(),2); ++i) {
+			for (int i = 1; i < Math.pow(model.getLabels().size(),2)+1; ++i) {
 				Rectangle2D rect = new Rectangle2D.Double(x,y,w,h);
 				g2D.draw(rect);
 				x += w;
