@@ -17,10 +17,10 @@ import javax.swing.JPanel;
 public class View extends JPanel {
 	     private Model model = null;
 	     private Rectangle2D markerRectangle = new Rectangle2D.Double(0,0,0,0);
-	     int x;
-	     int y;
-	     double w;
-	     double h;
+	     int x = 200;
+	     int y = 100;
+	     double w = 75;
+	     double h = 75;
 	     private Map<Data,Point2D> markedData = new HashMap<Data,Point2D>();
 	     
 
@@ -37,10 +37,6 @@ public class View extends JPanel {
 			
 			drawGrid(g2D);
 
-			x = 200;
-			y = 100;
-			w = 75;
-			h = 75;
 			for (Data d : model.getList()) {
 
 				if (markedData.containsKey(d)){
@@ -99,10 +95,6 @@ public class View extends JPanel {
 		}
 		
 		private void drawGrid(Graphics2D g2D) {
-			x = 200;
-			y = 100;
-			w = 75;
-			h = 75;
 			for (int i = 1; i < 50; ++i) {
 				Rectangle2D rect = new Rectangle2D.Double(x,y,w,h);
 				g2D.draw(rect);
@@ -110,8 +102,9 @@ public class View extends JPanel {
 				if(i%7 == 0) {
 					y += h;
 					x = 200;
-				}
+				}	
 			}
+			y = 100;
 		}
 		
 		private double getMappedValue(double oldValue, double oldMin, double oldMax, double newMin, double newMax) {
