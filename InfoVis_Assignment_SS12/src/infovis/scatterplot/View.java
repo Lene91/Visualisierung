@@ -45,10 +45,10 @@ public class View extends JPanel {
 				else{
 					g2D.setColor(Color.BLACK);
 				}
-				for (int i = 0; i < 7; ++i) {
+				for (int i = 0; i < model.getLabels().size(); ++i) {
 					Range rangeI = model.getRanges().get(i);
 					double newValueI = getMappedValue(d.getValues()[i], rangeI.getMin(), rangeI.getMax(), y, y+h);
-					for (int j = 0; j < 7; ++j) {
+					for (int j = 0; j < model.getLabels().size(); ++j) {
 						Range rangeJ = model.getRanges().get(j);
 						double newValueJ = getMappedValue(d.getValues()[j], rangeJ.getMin(), rangeJ.getMax(), x, x+w);
 						if (withinMarker(newValueJ,newValueI)){
@@ -79,11 +79,16 @@ public class View extends JPanel {
 			g2D.setColor(Color.BLACK);
 			
 			int i = 0;
-			int j = 10;
+			int j = 20;
 
 	        for (String l : model.getLabels()) {
-	        	g.drawString(l, 200+i*75, 50+j);
-	        	g.drawString(l, 20, 150+i*75);
+	        	Range r = model.getRanges().get(i);
+	        	String r_x = String.valueOf(r.getMin());
+	        	String r_y = String.valueOf(r.getMax());
+	        	g.drawString(l, 200+i*(int)w, 50+j);
+	        	g.drawString(r_x+" - "+r_y, 200+i*(int)w,65+j);
+	        	g.drawString(l, 20, 150+i*(int)h);
+	        	g.drawString(r_x+" - "+r_y, 20, 165+i*(int)h);
 				i++;
 				j = -j;
 			}
@@ -95,11 +100,11 @@ public class View extends JPanel {
 		}
 		
 		private void drawGrid(Graphics2D g2D) {
-			for (int i = 1; i < 50; ++i) {
+			for (int i = 1; i < Math.pow(model.getLabels().size(),2)+1; ++i) {
 				Rectangle2D rect = new Rectangle2D.Double(x,y,w,h);
 				g2D.draw(rect);
 				x += w;
-				if(i%7 == 0) {
+				if(i%model.getLabels().size() == 0) {
 					y += h;
 					x = 200;
 				}	
