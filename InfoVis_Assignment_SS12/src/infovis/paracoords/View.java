@@ -13,6 +13,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ public class View extends JPanel {
 	private int start = 110;
 	private int end = 510;
 	private int xStep = 100;
+	private ArrayList<Line2D> axes = new ArrayList<Line2D>();
     private Map<Data,Point2D> markedData = new HashMap<Data,Point2D>();
 	
 	public Rectangle2D getMarkerRectangle() {
@@ -36,24 +38,37 @@ public class View extends JPanel {
 		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		g2D.clearRect(0, 0, getWidth(), getHeight());
 		
+		if (axes.size() == 0){
+			initSystem();
+		}
 		drawSystem(g2D);
-		
 		drawData(g2D);
-		
 		g2D.setColor(Color.RED);
 		g2D.draw(markerRectangle);
 	}
 
-	private void drawSystem(Graphics2D g2D) {
+	private void initSystem() {
 		int x = xStep;
+		for(int i = 0; i < model.getLabels().size(); ++i)
+		{
+			Line2D line = new Line2D.Double(x,start,x,end);
+			axes.add(line);
+			x += xStep;
+		}
+	}
+		
+	private void drawSystem(Graphics2D g2D) {
+		int x;
 		int j = 10;
 		for(int i = 0; i < model.getLabels().size(); ++i)
 		{
+			Line2D line = axes.get(i);
+			
+			x = (int) line.getX1();
 			String label = model.getLabels().get(i);
 			g2D.drawString(label,x,50+j);
 			Range r = model.getRanges().get(i);
 			g2D.drawString(String.valueOf(r.getMax()), x, start-10);
-			Line2D line = new Line2D.Double(x,start,x,end);
 			g2D.draw(line);
 			g2D.drawString(String.valueOf(r.getMin()), x, end+15);
 			x += xStep;
@@ -72,9 +87,12 @@ public class View extends JPanel {
 				g2D.setColor(Color.BLACK);
 			}
 			
-			int xPos = xStep;
+			int xPos;
 			Path2D line = new Path2D.Double();
 			for (int i = 0; i < model.getLabels().size(); ++i) {
+				
+				Line2D axis = axes.get(i);
+				xPos = (int) axis.getX1();
 				Range range = model.getRanges().get(i);
 				double newValue = getMappedValue(d.getValues()[i], range.getMin(), range.getMax(), start, end);
 				if(i == 0)
@@ -126,16 +144,27 @@ public class View extends JPanel {
 	public Map<Data,Point2D> getMarkedData(){
 		return this.markedData;
 	}
+	
+	public void setOffsetAtIndex(double offset, int index ){
+		//axes.set(index, new Line2D.Double(offset, start, offset, end));
+		for (int i = index; i < axes.size(); i++){
+			Line2D line = axes.get(i);
+			axes.set(i, new Line2D.Double(line.getX1()+offset, start, line.getX2()+offset, end));
+
+		}
+	}
 
 	private boolean withinMarker(double x, double y){
 		return markerRectangle.contains(x,y);
 	}
 	
-	public boolean isNearAxis(double x, double y) {
-		double tmp = x % xStep; 
-		if (xStep - tmp < 10 && x > 90 && y > start && y < end)
-			return true;
-		else return false;		
+	public int isNearAxis(double x, double y) {
+		for (Line2D l: axes) {
+			if (Math.abs(l.getX1()-x) <= 5)
+				return axes.indexOf(l);	
+		}
+		return -1;
+		
 	}
 	
 }

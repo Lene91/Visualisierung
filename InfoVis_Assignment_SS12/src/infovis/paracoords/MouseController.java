@@ -11,6 +11,9 @@ public class MouseController implements MouseListener, MouseMotionListener {
 	private View view = null;
 	private Model model = null;
 	Shape currentShape = null;
+	int moving_line_index = -1;
+	boolean move_axis = false;
+	boolean mark_stuff = false;
 	private double startX = 0;
 	private double startY = 0;
 	
@@ -29,19 +32,33 @@ public class MouseController implements MouseListener, MouseMotionListener {
 	public void mousePressed(MouseEvent e) {
 		startX = e.getX();
 		startY = e.getY();
-		if(view.isNearAxis(startX,startY))
-			System.out.println(":)");
+		int l = view.isNearAxis(startX,startY);
+		if(l >= 0){
+			moving_line_index=l;
+			System.out.println(l);
+			move_axis = true;
+		}
+		else
+			mark_stuff = true;
+			
 
 	}
 
 	public void mouseReleased(MouseEvent e) {
+		move_axis = false;
+		moving_line_index = -1;
+		mark_stuff = false; 
 
 	}
 
 	public void mouseDragged(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
-		view.getMarkerRectangle().setRect(startX, startY, x-startX, y-startY);
+		if (mark_stuff == true)
+			view.getMarkerRectangle().setRect(startX, startY, x-startX, y-startY);
+		else if (move_axis == true){
+			view.setOffsetAtIndex(x-startX,moving_line_index);
+		}
 		view.repaint();
 
 	}
