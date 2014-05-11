@@ -108,8 +108,9 @@ public class View extends JPanel {
 				if(i%model.getLabels().size() == 0) {
 					y += h;
 					x = 200;
-				}
+				}	
 			}
+			y = 100;
 		}
 		
 		private double getMappedValue(double oldValue, double oldMin, double oldMax, double newMin, double newMax) {
