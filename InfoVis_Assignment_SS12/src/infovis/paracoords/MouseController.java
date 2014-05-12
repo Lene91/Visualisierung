@@ -35,7 +35,7 @@ public class MouseController implements MouseListener, MouseMotionListener {
 		int l = view.isNearAxis(startX,startY);
 		if(l >= 0){
 			moving_line_index=l;
-			System.out.println(l);
+			//System.out.println(l);
 			move_axis = true;
 		}
 		else
@@ -57,7 +57,7 @@ public class MouseController implements MouseListener, MouseMotionListener {
 		if (mark_stuff == true)
 			view.getMarkerRectangle().setRect(startX, startY, x-startX, y-startY);
 		else if (move_axis == true){
-			view.setOffsetAtIndex(x-startX,moving_line_index);
+			view.setOffsetAtIndex(x,moving_line_index);
 		}
 		view.repaint();
 

@@ -147,9 +147,13 @@ public class View extends JPanel {
 	
 	public void setOffsetAtIndex(double offset, int index ){
 		//axes.set(index, new Line2D.Double(offset, start, offset, end));
-		for (int i = index; i < axes.size(); i++){
-			Line2D line = axes.get(i);
-			axes.set(i, new Line2D.Double(line.getX1()+offset, start, line.getX2()+offset, end));
+		
+		Line2D line = axes.get(index);
+		double x = line.getX1() - offset;
+		axes.set(index, new Line2D.Double(offset, start, offset, end));
+		for (int i = index+1; i < axes.size(); i++){
+			Line2D l = axes.get(i);
+			axes.set(i, new Line2D.Double(l.getX1()-x, start, l.getX2()-x, end));
 
 		}
 	}
