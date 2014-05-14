@@ -42,6 +42,12 @@ public class Model {
 	public Iterator iteratorEdges(){
 		return edges.iterator();
 	}
+	
+	public void copyModel(Model m){
+		for (Vertex vertex: m.getVertices()) {
+			this.addVertex(new Vertex(vertex));
+		}
+	}
 
 	public void addLabel(Label label){
 		//Debug.print("DiagramModel.addLabel invoked");
@@ -97,7 +103,7 @@ public class Model {
 	public List<Vertex> getVertices() {
 		return vertices;
 	}
-	
+
 	public List<Element> getElements() {
 		return elements;
 	}

@@ -19,8 +19,10 @@ import java.util.List;
 
 public class MouseController implements MouseListener,MouseMotionListener {
 	 private Model model;
+	 private Model fisheye_model;
 	 private View view;
 	 private Element selectedElement = null;
+	 private Fisheye fisheye = new Fisheye();
 	 private double mouseOffsetX;
 	 private double mouseOffsetY;
 	 private boolean markerDrag = false;
@@ -193,10 +195,10 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		 * Aufgabe 1.2
 		 */
 		if (fisheyeMode){
-			/*
-			 * handle fisheye mode interactions
-			 */
-			view.repaint();
+			fisheye.setMouseCoords(x, y, view);
+			fisheye_model = new Model();
+			fisheye_model.copyModel(model);
+			view.setModel(fisheye.transform(fisheye_model, view));
 		} else if (edgeDrawMode){
 			drawingEdge.setX(e.getX());
 			drawingEdge.setY(e.getY());
@@ -225,9 +227,9 @@ public class MouseController implements MouseListener,MouseMotionListener {
 		fisheyeMode = b;
 		if (b){
 			Debug.p("new Fisheye Layout");
-			/*
-			 * handle fish eye initial call
-			 */
+			fisheye_model = new Model();
+			fisheye_model.copyModel(model);
+			view.setModel(fisheye.transform(fisheye_model, view));
 			view.repaint();
 		} else {
 			Debug.p("new Normal Layout");
