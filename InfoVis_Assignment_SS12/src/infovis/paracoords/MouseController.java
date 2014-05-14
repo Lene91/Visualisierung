@@ -6,6 +6,7 @@ import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Line2D;
 
 public class MouseController implements MouseListener, MouseMotionListener {
 	private View view = null;
@@ -33,9 +34,8 @@ public class MouseController implements MouseListener, MouseMotionListener {
 		startX = e.getX();
 		startY = e.getY();
 		int l = view.isNearAxis(startX,startY);
-		if(l >= 0){
+		if(l >= 0) {
 			moving_line_index=l;
-			//System.out.println(l);
 			move_axis = true;
 		}
 		else
@@ -56,7 +56,17 @@ public class MouseController implements MouseListener, MouseMotionListener {
 		int y = e.getY();
 		if (mark_stuff == true)
 			view.getMarkerRectangle().setRect(startX, startY, x-startX, y-startY);
-		else if (move_axis == true){
+		else if (move_axis == true) {
+			Line2D current = view.getCurrentLine(moving_line_index);
+			Line2D leftNeighbour = view.getLeftNeighbour(moving_line_index);
+			Line2D rightNeighbour = view.getRightNeighbour(moving_line_index);
+			if (leftNeighbour != null && current.getX1() < leftNeighbour.getX1()) {
+				view.changePositions(moving_line_index-1, moving_line_index);
+				
+			}
+			else if (rightNeighbour != null && current.getX1() > rightNeighbour.getX1()) {
+				view.changePositions(moving_line_index, moving_line_index+1);
+			}
 			view.setOffsetAtIndex(x,moving_line_index);
 		}
 		view.repaint();

@@ -25,6 +25,7 @@ public class View extends JPanel {
 	private int start = 110;
 	private int end = 510;
 	private int xStep = 100;
+	private ArrayList<Integer> axesNumbers = new ArrayList<Integer>();
 	private ArrayList<Line2D> axes = new ArrayList<Line2D>();
     private Map<Data,Point2D> markedData = new HashMap<Data,Point2D>();
 	
@@ -54,6 +55,7 @@ public class View extends JPanel {
 			Line2D line = new Line2D.Double(x,start,x,end);
 			axes.add(line);
 			x += xStep;
+			axesNumbers.add(i);
 		}
 	}
 		
@@ -78,6 +80,9 @@ public class View extends JPanel {
 	
 	private void drawData(Graphics2D g2D)
 	{
+		for(int a : axesNumbers)
+			System.out.println(a);
+		System.out.println();
 		for (Data d : model.getList()) {
 			
 			if (markedData.containsKey(d)){
@@ -89,14 +94,19 @@ public class View extends JPanel {
 			
 			int xPos;
 			Path2D line = new Path2D.Double();
-			for (int i = 0; i < model.getLabels().size(); ++i) {
+			//for (int i = 0; i < model.getLabels().size(); ++i) {
+			boolean firstDrawn = false;
+			for (int i : axesNumbers) {
+				
 				
 				Line2D axis = axes.get(i);
 				xPos = (int) axis.getX1();
 				Range range = model.getRanges().get(i);
 				double newValue = getMappedValue(d.getValues()[i], range.getMin(), range.getMax(), start, end);
-				if(i == 0)
+				if(!firstDrawn) {
 					line.moveTo(xPos, newValue);
+					firstDrawn = true;
+				}
 				else
 					line.lineTo(xPos, newValue);
 				if (withinMarker(xPos,newValue)){
@@ -113,11 +123,8 @@ public class View extends JPanel {
 				}
 				xPos += xStep;
 			}
-			g2D.draw(line);
-		
+			g2D.draw(line);	
 		}
-		
-	
 	}
 	
 	private double getMappedValue(double oldValue, double oldMin, double oldMax, double newMin, double newMax) {
@@ -151,11 +158,10 @@ public class View extends JPanel {
 		Line2D line = axes.get(index);
 		double x = line.getX1() - offset;
 		axes.set(index, new Line2D.Double(offset, start, offset, end));
-		for (int i = index+1; i < axes.size(); i++){
-			Line2D l = axes.get(i);
-			axes.set(i, new Line2D.Double(l.getX1()-x, start, l.getX2()-x, end));
-
-		}
+//		for (int i = index+1; i < axes.size(); i++){
+//			Line2D l = axes.get(i);
+//			axes.set(i, new Line2D.Double(l.getX1()-x, start, l.getX2()-x, end));
+//		}
 	}
 
 	private boolean withinMarker(double x, double y){
@@ -167,8 +173,37 @@ public class View extends JPanel {
 			if (Math.abs(l.getX1()-x) <= 5)
 				return axes.indexOf(l);	
 		}
-		return -1;
-		
+		return -1;	
 	}
 	
+	public Line2D getLeftNeighbour(int index)
+	{
+		if (axesNumbers.get(index) == 0)
+			return null;
+		return axes.get(axesNumbers.get(index - 1));
+	}
+	
+	public Line2D getRightNeighbour(int index)
+	{
+		if (axesNumbers.get(index) == axes.size()-1)
+			return null;
+		return axes.get(axesNumbers.get(index + 1));
+	}
+	
+	public Line2D getCurrentLine(int index)
+	{
+		return axes.get(axesNumbers.get(index));
+	}
+	
+	public void changePositions(int index1, int index2)
+	{
+		//Line2D first = axes.get(index1);
+		//Line2D second = axes.get(index2);
+		//axes.set(index1, second);
+		//axes.set(index2, first);
+		int firstInt = axesNumbers.get(index1);
+		int secondInt = axesNumbers.get(index2);
+		axesNumbers.set(index1, secondInt);
+		axesNumbers.set(index2, firstInt);
+	}
 }
