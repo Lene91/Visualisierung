@@ -80,9 +80,9 @@ public class View extends JPanel {
 	
 	private void drawData(Graphics2D g2D)
 	{
-		for(int a : axesNumbers)
-			System.out.println(a);
-		System.out.println();
+//		for(int a : axesNumbers)
+//			System.out.println(a);
+//		System.out.println();
 		for (Data d : model.getList()) {
 			
 			if (markedData.containsKey(d)){
@@ -94,11 +94,12 @@ public class View extends JPanel {
 			
 			int xPos;
 			Path2D line = new Path2D.Double();
-			//for (int i = 0; i < model.getLabels().size(); ++i) {
+			
 			boolean firstDrawn = false;
-			for (int i : axesNumbers) {
+			for (int j = 0; j < model.getLabels().size(); ++j) {
+			//for (int i : axesNumbers) {
 				
-				
+				int i = axesNumbers.indexOf(j);
 				Line2D axis = axes.get(i);
 				xPos = (int) axis.getX1();
 				Range range = model.getRanges().get(i);
@@ -170,40 +171,56 @@ public class View extends JPanel {
 	
 	public int isNearAxis(double x, double y) {
 		for (Line2D l: axes) {
-			if (Math.abs(l.getX1()-x) <= 5)
-				return axes.indexOf(l);	
+			if ((y > l.getY1()) && (y<l.getY2())){
+				if (Math.abs(l.getX1()-x) <= 5)
+					return axes.indexOf(l);	
+			}
 		}
 		return -1;	
 	}
 	
 	public Line2D getLeftNeighbour(int index)
 	{
-		if (axesNumbers.get(index) == 0)
+		int current_pos = axesNumbers.get(index); 
+		if (current_pos > 0){
+			//System.out.println("\n"+axesNumbers.indexOf(current_pos-1)+"\n");
+			return axes.get(axesNumbers.indexOf(current_pos-1));}
+		else
 			return null;
-		return axes.get(axesNumbers.get(index - 1));
 	}
 	
 	public Line2D getRightNeighbour(int index)
 	{
-		if (axesNumbers.get(index) == axes.size()-1)
+		int current_pos = axesNumbers.get(index); 
+		if (current_pos < axesNumbers.size()-1){
+			//System.out.println("\n \t \t"+axesNumbers.indexOf(current_pos+1)+"\n");
+			return axes.get(axesNumbers.indexOf(current_pos+1));}
+		else
 			return null;
-		return axes.get(axesNumbers.get(index + 1));
 	}
 	
 	public Line2D getCurrentLine(int index)
 	{
-		return axes.get(axesNumbers.get(index));
+		//System.out.println("\n \t"+index+"\n");
+		return axes.get(index);
 	}
 	
-	public void changePositions(int index1, int index2)
+	public void changePositions(int index, String s)
 	{
 		//Line2D first = axes.get(index1);
 		//Line2D second = axes.get(index2);
 		//axes.set(index1, second);
 		//axes.set(index2, first);
-		int firstInt = axesNumbers.get(index1);
-		int secondInt = axesNumbers.get(index2);
-		axesNumbers.set(index1, secondInt);
-		axesNumbers.set(index2, firstInt);
+		
+		int firstInt = axesNumbers.get(index);
+		
+		int change_partner = axesNumbers.indexOf(firstInt-1);
+		if (s.equals("right"))
+			change_partner = axesNumbers.indexOf(firstInt+1);
+		
+		int secondInt = axesNumbers.get(change_partner);
+		
+		axesNumbers.set(index, secondInt);
+		axesNumbers.set(change_partner, firstInt);
 	}
 }

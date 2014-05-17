@@ -33,15 +33,13 @@ public class MouseController implements MouseListener, MouseMotionListener {
 	public void mousePressed(MouseEvent e) {
 		startX = e.getX();
 		startY = e.getY();
-		int l = view.isNearAxis(startX,startY);
+		int l = view.isNearAxis(startX, startY);
 		if(l >= 0) {
 			moving_line_index=l;
 			move_axis = true;
 		}
 		else
 			mark_stuff = true;
-			
-
 	}
 
 	public void mouseReleased(MouseEvent e) {
@@ -57,15 +55,17 @@ public class MouseController implements MouseListener, MouseMotionListener {
 		if (mark_stuff == true)
 			view.getMarkerRectangle().setRect(startX, startY, x-startX, y-startY);
 		else if (move_axis == true) {
+			
 			Line2D current = view.getCurrentLine(moving_line_index);
 			Line2D leftNeighbour = view.getLeftNeighbour(moving_line_index);
 			Line2D rightNeighbour = view.getRightNeighbour(moving_line_index);
-			if (leftNeighbour != null && current.getX1() < leftNeighbour.getX1()) {
-				view.changePositions(moving_line_index-1, moving_line_index);
+			
+			if (leftNeighbour != null && current.getX1() <= leftNeighbour.getX1() && Math.abs(current.getX1() - leftNeighbour.getX1())> 5) {
+				view.changePositions(moving_line_index, "left");
 				
 			}
-			else if (rightNeighbour != null && current.getX1() > rightNeighbour.getX1()) {
-				view.changePositions(moving_line_index, moving_line_index+1);
+			if (rightNeighbour != null && current.getX1() >= rightNeighbour.getX1()&& Math.abs(current.getX1() - rightNeighbour.getX1())> 5) {
+				view.changePositions(moving_line_index, "right");
 			}
 			view.setOffsetAtIndex(x,moving_line_index);
 		}
