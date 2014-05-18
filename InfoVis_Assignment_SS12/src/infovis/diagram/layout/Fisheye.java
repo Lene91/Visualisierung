@@ -77,19 +77,18 @@ public class Fisheye implements Layout{
 		double d_max;
 		double p_fish;
 		if (p_norm > p_focus){
-			d_max = p_boundary - p_focus;
+			d_max = p_boundary  - p_focus;
 			double d_norm_div_max = d_norm/d_max;
-			if (d_norm_div_max > 1)
-				d_norm_div_max = 1;
-			p_fish = p_focus - G(d_norm_div_max)*d_max;
+			p_fish = p_focus + G(d_norm_div_max)*d_max;
 		}
-		else
+		else {
 			//d_norm = p_focus - p_norm;
-			d_max = -p_focus;
+			d_max =-p_focus;
 			double d_norm_div_max = d_norm/d_max;
 			if (d_norm_div_max > 1)
 				d_norm_div_max = 1;
 			p_fish = p_focus + G(d_norm_div_max)*d_max;
+		}
 		return p_fish;
 	}
 	
@@ -97,7 +96,6 @@ public class Fisheye implements Layout{
 	public double G(double x){
 		double d = 2;
 		double r = ((d+1)*x)/(d*x+1);
-		System.out.println(r);
 		return r;
 	}
 	
